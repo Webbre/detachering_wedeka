@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casus analyse: cross-gemeentelijke plaatsing beschut werk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom Chart Container Styles based on requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Process Flow Connector Styles */
+        .connector-line {
+            transition: all 0.5s ease;
+            height: 4px;
+            background-color: #e5e7eb; /* gray-200 */
+        }
+        .connector-line.active {
+            background-color: #d97706; /* amber-600 */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+
+        .highlight-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .highlight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Chosen Palette: Warm Neutrals (Stone/Warm Gray) with Amber accents for a calm, supportive, yet professional government/social work tone. -->
+    
+    <!-- Application Structure Plan: 
+         1. Introduction & Context: Briefly introduces the employee's situation (The "Why").
+         2. Stakeholder Matrix: Interactive cards explaining roles (BWRI, Wedeka, Employee, UWV).
+         3. Feasibility Analysis: A Radar Chart visualizing the 'soft' metrics (motivation, cooperation) extracted from the text to show viability.
+         4. The Solution Architecture (The Construction): An interactive block diagram demonstrating the legal/financial flow of "Detachering". This is the core "Expertise" visualization.
+         5. Action Timeline: A vertical step-by-step guide from current state to realization.
+         Why: This structure breaks a complex bureaucratic problem into manageable parts: Who, Why, How, and When.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header Section -->
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-stone-800 tracking-tight mb-2">Casus verkenning: cross-gemeentelijke plaatsing</h1>
+            <p class="text-lg text-stone-600 max-w-2xl mx-auto">Interactieve analyse van de mogelijkheden voor beschut werk over gemeentegrenzen heen (Midden-Groningen &harr; Veendam).</p>
+        </header>
+
+        <!-- Section 1: Context Summary -->
+        <section class="mb-12">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+                <h2 class="text-2xl font-semibold text-stone-800 mb-4 border-b border-stone-100 pb-2">1. De situatie</h2>
+                <p class="text-stone-600 mb-6 leading-relaxed">
+                    Deze sectie schetst de kern van de casus. De werknemer, woonachtig in Muntendam, heeft een sterke voorkeur voor een werkplek bij Wedeka (Veendam/Stadskanaal), terwijl deze formeel onder de verantwoordelijkheid van BWRI (Midden-Groningen) valt. Deze 'mismatch' tussen woonplaats en gewenste werkplek vraagt om een specifieke juridische en financiële constructie.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-stone-50 p-5 rounded-lg border-l-4 border-amber-500">
+                        <h3 class="font-bold text-lg mb-2">Huidige status</h3>
+                        <ul class="space-y-2 text-sm text-stone-700">
+                            <li><strong>Kandidaat:</strong> Werknemer (Wajong)</li>
+                            <li><strong>Woonplaats:</strong> Muntendam (Gem. Midden-Groningen)</li>
+                            <li><strong>Huidig:</strong> Dagbesteding Heemtuin</li>
+                            <li><strong>Wens:</strong> Werken bij Wedeka (Groen)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-stone-50 p-5 rounded-lg border-l-4 border-stone-400">
+                        <h3 class="font-bold text-lg mb-2">De uitdaging</h3>
+                        <p class="text-sm text-stone-700">
+                            Het <em>woonplaatsbeginsel</em> dicteert normaal gesproken dat inwoners van Midden-Groningen bij BWRI werken. Voor de werknemer is een uitzondering nodig om bij Wedeka aan de slag te gaan, zonder dat de financiering vastloopt.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Stakeholder Analysis -->
+        <section class="mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-4">
+                <div class="max-w-2xl">
+                    <h2 class="text-2xl font-semibold text-stone-800">2. Betrokken partijen & belangen</h2>
+                    <p class="text-stone-600 mt-2 text-sm">Klik op een kaart om de specifieke rol en acties in deze casus te zien.</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="stakeholder-grid">
+                <!-- Cards generated by JS -->
+            </div>
+        </section>
+
+        <!-- Section 3: Feasibility Dashboard -->
+        <section class="mb-12">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-2xl font-semibold text-stone-800 mb-4">3. Analyse haalbaarheid</h2>
+                <p class="text-stone-600 mb-6 text-sm">
+                    Op basis van het intakegesprek en overleg met HR-adviseurs is een inschatting gemaakt van de succesfactoren. Onderstaande visualisatie toont waarom deze casus een hoge kans van slagen heeft ondanks de bureaucratische hobbels.
+                </p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <!-- Visualization & Content Choices: Radar Chart chosen to show multiple dimensions of 'success' simultaneously. It allows comparing the strong 'soft' factors (motivation, network) against the 'hard' hurdles (regulations). -->
+                        <div class="chart-container">
+                            <canvas id="feasibilityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-amber-50 rounded-lg border border-amber-100">
+                            <h4 class="font-bold text-amber-900 text-sm uppercase tracking-wide mb-1">Conclusie analyse</h4>
+                            <p class="text-stone-700 text-sm">
+                                De "zachte" factoren (motivatie, bekende omgeving, steun UWV) scoren maximaal. De juridische complexiteit is de enige remmende factor, maar door welwillendheid van HR (BWRI/Wedeka) is deze horde beheersbaar.
+                            </p>
+                        </div>
+                        <div id="dynamic-insight" class="text-sm text-stone-500 italic">
+                            Interactie: beweeg over de grafiekpunten voor gedetailleerde scores.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Construction (Solution) -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-stone-800 mb-4">4. De oplossing: detacheringsmodel</h2>
+            <p class="text-stone-600 mb-6 max-w-3xl">
+                Om de werknemer in Veendam te laten werken terwijl hij in Midden-Groningen woont, is de <strong>detacheringsconstructie</strong> de meest waarschijnlijke oplossing. Hieronder visualiseren we hoe de geldstromen en verantwoordelijkheden lopen.
+            </p>
+
+            <div class="bg-white rounded-xl shadow-lg border border-stone-200 p-8 overflow-hidden relative">
+                <!-- Control Panel -->
+                <div class="flex justify-center mb-8 space-x-4">
+                    <button onclick="animateFlow('step1')" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-sm font-medium transition-colors border border-stone-300">Stap 1: formeel dienstverband</button>
+                    <button onclick="animateFlow('step2')" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-sm font-medium transition-colors border border-stone-300">Stap 2: de werkplek</button>
+                    <button onclick="animateFlow('step3')" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-sm font-medium transition-colors border border-stone-300">Stap 3: financiën</button>
+                    <button onclick="animateFlow('all')" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm font-medium transition-colors shadow-md">Toon volledige constructie</button>
+                </div>
+
+                <!-- Visualization Area (Grid Layout) -->
+                <div class="grid grid-cols-3 gap-8 relative max-w-4xl mx-auto">
+                    
+                    <!-- Top Row: Funder -->
+                    <div class="col-span-3 flex justify-center mb-8">
+                        <div id="box-uwv" class="w-48 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg text-center z-10 relative">
+                            <div class="font-bold text-blue-800">UWV / Rijk</div>
+                            <div class="text-xs text-blue-600">Financiering Wajong/loonkostensubsidie</div>
+                        </div>
+                    </div>
+
+                    <!-- Middle Row: Employers -->
+                    <div class="col-span-1 flex flex-col items-center">
+                        <div id="box-bwri" class="w-48 p-4 bg-stone-100 border-2 border-stone-400 rounded-lg text-center z-10 relative h-32 flex flex-col justify-center">
+                            <div class="font-bold text-stone-800">BWRI</div>
+                            <div class="text-xs text-stone-600">(Midden-Groningen)</div>
+                            <div class="mt-2 text-xs font-semibold bg-stone-200 py-1 rounded">Formeel werkgever</div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-1 flex items-center justify-center relative">
+                        <!-- Connecting Lines Area -->
+                        <div class="text-xs text-stone-400 font-mono text-center">
+                            <span id="label-detachering" class="hidden bg-white px-2 py-1 border rounded shadow-sm">Inleen / detachering</span>
+                        </div>
+                    </div>
+
+                    <div class="col-span-1 flex flex-col items-center">
+                        <div id="box-wedeka" class="w-48 p-4 bg-green-50 border-2 border-green-200 rounded-lg text-center z-10 relative h-32 flex flex-col justify-center">
+                            <div class="font-bold text-green-800">Wedeka</div>
+                            <div class="text-xs text-green-600">(Veendam)</div>
+                            <div class="mt-2 text-xs font-semibold bg-green-100 py-1 rounded">Feitelijke werkplek</div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Row: Employee -->
+                    <div class="col-span-3 flex justify-center mt-8">
+                        <div id="box-werknemer" class="w-48 p-4 bg-amber-50 border-2 border-amber-400 rounded-lg text-center z-10 relative">
+                            <div class="font-bold text-amber-900">Werknemer</div>
+                            <div class="text-xs text-amber-700">De werknemer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="flow-explanation" class="mt-8 p-4 bg-stone-50 rounded border border-stone-200 text-center text-stone-700 min-h-[80px] flex items-center justify-center transition-all duration-300">
+                    Klik op de knoppen hierboven om de constructie stapsgewijs op te bouwen.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Timeline -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-stone-800 mb-4">5. Tijdpad & acties</h2>
+            <p class="text-stone-600 mb-6">Het proces is opgedeeld in fasen om de risico's voor zowel de werknemer als de organisaties te minimaliseren.</p>
+            
+            <div class="relative border-l-2 border-stone-200 ml-4 space-y-8 pb-4">
+                <!-- Timeline items generated by JS -->
+                <div id="timeline-container"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA & STATE ---
+        const stakeholders = [
+            {
+                id: 'werknemer',
+                name: 'Werknemer',
+                role: 'Kandidaat',
+                desc: 'Gemotiveerd, Wajong-status, wil groeien in groenvoorziening.',
+                focus: 'Ontwikkeling & werkplezier',
+                color: 'border-amber-400 bg-amber-50'
+            },
+            {
+                id: 'wedeka',
+                name: 'Wedeka',
+                role: 'Inlenende partij',
+                desc: 'Ziet potentie in de werknemer. Kent kandidaat. Wil begeleiding bieden.',
+                focus: 'Capaciteit & sociaal ondernemen',
+                color: 'border-green-400 bg-green-50'
+            },
+            {
+                id: 'bwri',
+                name: 'BWRI',
+                role: 'Formele werkgever',
+                desc: 'Verantwoordelijk voor inwoners Midden-Groningen. HR staat open voor constructie.',
+                focus: 'Wettelijke taak & budget',
+                color: 'border-stone-400 bg-stone-100'
+            },
+            {
+                id: 'uwv',
+                name: 'UWV',
+                role: 'Financier & adviseur',
+                desc: 'Koopt "werkfit"-traject in. Beoordeelt arbeidsvermogen.',
+                focus: 'Duurzame participatie',
+                color: 'border-blue-400 bg-blue-50'
+            }
+        ];
+
+        const timelineEvents = [
+            {
+                date: '21 nov',
+                title: 'Initiële verkenning',
+                desc: 'Gesprek met de werknemer en werkleiders Wedeka. Wens uitgesproken.',
+                status: 'completed'
+            },
+            {
+                date: 'Heden',
+                title: 'Formele afstemming',
+                desc: 'Contact HR BWRI & HR Wedeka. Bevestiging dat "tenzij"-constructie mogelijk is.',
+                status: 'completed'
+            },
+            {
+                date: 'Dec / begin jan',
+                title: 'Kennismaking & planning',
+                desc: 'De werknemer maakt informeel kennis. Werkfit-inkoop wordt voorbereid door UWV.',
+                status: 'upcoming'
+            },
+            {
+                date: 'Medio januari',
+                title: 'Start werkfit-traject',
+                desc: 'UWV koopt traject in bij Wedeka. Start meting belastbaarheid en zelfredzaamheid.',
+                status: 'pending'
+            },
+            {
+                date: 'Q1 / Q2',
+                title: 'Besluitvorming beschut werk',
+                desc: 'Bij positief resultaat Werkfit: indicatieaanvraag beschut werk + start detachering.',
+                status: 'pending'
+            }
+        ];
+
+        // --- DOM GENERATION ---
+
+        function renderStakeholders() {
+            const container = document.getElementById('stakeholder-grid');
+            stakeholders.forEach(stakeholder => {
+                const card = document.createElement('div');
+                card.className = `highlight-card p-5 rounded-lg border-t-4 ${stakeholder.color} bg-white shadow-sm cursor-pointer`;
+                card.innerHTML = `
+                    <h3 class="font-bold text-lg text-stone-800">${stakeholder.name}</h3>
+                    <p class="text-xs font-semibold text-stone-500 uppercase mb-2">${stakeholder.role}</p>
+                    <p class="text-sm text-stone-600 mb-3">${stakeholder.desc}</p>
+                    <div class="text-xs font-medium px-2 py-1 bg-stone-100 rounded inline-block">Belang: ${stakeholder.focus}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            timelineEvents.forEach((event, index) => {
+                const isLast = index === timelineEvents.length - 1;
+                const markerColor = event.status === 'completed' ? 'bg-green-500' : (event.status === 'upcoming' ? 'bg-amber-500' : 'bg-stone-300');
+                
+                const item = document.createElement('div');
+                item.className = 'mb-8 ml-6 relative';
+                item.innerHTML = `
+                    <span class="absolute -left-[35px] flex h-6 w-6 items-center justify-center rounded-full ${markerColor} ring-4 ring-white">
+                        ${event.status === 'completed' ? '<span class="text-white text-xs">?</span>' : ''}
+                    </span>
+                    <h3 class="flex items-center mb-1 text-lg font-semibold text-stone-900">
+                        ${event.title}
+                        <span class="bg-stone-100 text-stone-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ml-3 border border-stone-200">${event.date}</span>
+                    </h3>
+                    <p class="mb-4 text-base font-normal text-stone-500 max-w-2xl">${event.desc}</p>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // --- CHART.JS INITIALIZATION ---
+
+        function initCharts() {
+            const ctx = document.getElementById('feasibilityChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Motivatie kandidaat', 
+                        'UWV medewerking', 
+                        'Werkgevers welwillendheid', 
+                        'Afstand/logistiek', 
+                        'Juridische eenvoud',
+                        'Financiële dekking'
+                    ],
+                    datasets: [{
+                        label: 'Score (1-10)',
+                        data: [9, 8, 8, 7, 4, 7], // Low score on legal simplicity implies complexity
+                        fill: true,
+                        backgroundColor: 'rgba(217, 119, 6, 0.2)', // Amber-600
+                        borderColor: 'rgb(217, 119, 6)',
+                        pointBackgroundColor: 'rgb(217, 119, 6)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(217, 119, 6)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scale: {
+                        min: 0,
+                        max: 10,
+                        ticks: {
+                            stepSize: 2,
+                            backdropColor: 'transparent' // Hide default white backdrop
+                        },
+                        grid: {
+                            color: '#e7e5e4' // Stone-200
+                        },
+                        angleLines: {
+                            color: '#e7e5e4'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 12,
+                                family: 'ui-sans-serif, system-ui'
+                            },
+                            color: '#44403c' // Stone-700
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const labels = [
+                                        "De werknemer is zeer gemotiveerd en bekend bij werkleiders.",
+                                        "Werkcoach UWV is positief en wil werkfit inkopen.",
+                                        "Zowel Wedeka als BWRI HR staan open voor oplossingen.",
+                                        "Woon-werkverkeer Muntendam-Veendam is goed te doen.",
+                                        "Woonplaatsbeginsel vereist extra contractwerk (detachering).",
+                                        "Wajong + werkfit is gedekt; beschut werk vereist afstemming."
+                                    ];
+                                    return labels[context.dataIndex];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- INTERACTIVE FLOW LOGIC ---
+
+        function resetFlow() {
+            // Reset styles for a clean slate
+            ['box-uwv', 'box-bwri', 'box-wedeka', 'box-werknemer'].forEach(id => {
+                document.getElementById(id).style.opacity = '0.4';
+                document.getElementById(id).style.transform = 'scale(0.95)';
+                document.getElementById(id).classList.remove('ring-4', 'ring-amber-300', 'ring-offset-2');
+            });
+            document.getElementById('label-detachering').classList.add('hidden');
+        }
+
+        function highlightBox(id) {
+            const el = document.getElementById(id);
+            el.style.opacity = '1';
+            el.style.transform = 'scale(1)';
+            el.classList.add('transition-all', 'duration-500');
+        }
+
+        function animateFlow(step) {
+            resetFlow();
+            const explanation = document.getElementById('flow-explanation');
+            
+            if (step === 'step1') {
+                highlightBox('box-bwri');
+                highlightBox('box-werknemer');
+                explanation.innerHTML = "<strong>Stap 1:</strong> BWRI (Midden-Groningen) is de wettelijke werkgever op basis van woonplaats. Zij bieden de werknemer het contract aan.";
+            } else if (step === 'step2') {
+                highlightBox('box-bwri');
+                highlightBox('box-wedeka');
+                highlightBox('box-werknemer');
+                document.getElementById('label-detachering').classList.remove('hidden');
+                explanation.innerHTML = "<strong>Stap 2:</strong> BWRI leent de werknemer uit aan Wedeka via een detacheringscontract. Wedeka betaalt een inleentarief aan BWRI en biedt de werkplek/begeleiding.";
+            } else if (step === 'step3') {
+                highlightBox('box-uwv');
+                highlightBox('box-bwri');
+                explanation.innerHTML = "<strong>Stap 3:</strong> UWV verstrekt subsidies (loonkostensubsidie/jobcoach-budget) aan de formele werkgever (BWRI) ter compensatie van de verminderde loonwaarde.";
+            } else if (step === 'all') {
+                ['box-uwv', 'box-bwri', 'box-wedeka', 'box-werknemer'].forEach(id => highlightBox(id));
+                document.getElementById('label-detachering').classList.remove('hidden');
+                explanation.innerHTML = "<strong>Totaalplaatje:</strong> een gesloten keten waarbij de werknemer werkt waar hij wil (Wedeka), maar administratief valt onder zijn woongemeente (BWRI).";
+            }
+        }
+
+        // --- INITIALIZATION ---
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStakeholders();
+            renderTimeline();
+            initCharts();
+            // Start with all highlighted slightly dimmed to encourage interaction
+            resetFlow(); 
+            // Briefly highlight all to show presence
+            setTimeout(() => {
+                ['box-uwv', 'box-bwri', 'box-wedeka', 'box-werknemer'].forEach(id => {
+                     document.getElementById(id).style.opacity = '1';
+                     document.getElementById(id).style.transform = 'scale(1)';
+                });
+            }, 500);
+        });
+
+    </script>
+</body>
+</html>
